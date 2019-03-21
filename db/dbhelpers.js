@@ -1,17 +1,13 @@
 const Users = require('./models.js');
 
 // post
-const postUserHelper = () =>
-    Users.create({})
+const postUserHelper = (obj) =>
+    Users.create(obj)
 
-// update
-const formOneHelper = (name, email, password) => {
-    Users.update()
-}
-
-
-// get
+const getUserHelper = () =>
+    Users.findAll()
 
 module.exports = {
-    postUserHelper
+    postUserHelper,
+    getUserHelper
 }

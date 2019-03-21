@@ -5,41 +5,63 @@ class App extends React.Component {
         this.state = {
             count: 0,
             name: '',
-            email: '',
+            email: 'test5@test.com',
             password: '',
             address1: '',
             address2: '',
             address_city: '',
             address_state: '',
-            address_zip: null,
-            phone: null,
-            cc_num: null,
-            cc_expmonth: null,
-            cc_expyear: null,
-            cc_ccv: null,
-            cc_zip: null
+            address_zip: '',
+            phone: '',
+            cc_num: '',
+            cc_expmonth: '',
+            cc_expyear: '',
+            cc_ccv: '',
+            cc_zip: '',
+            result: []
         }
         this.handleNextButton = this.handleNextButton.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmitButton = this.handleSubmitButton.bind(this);
+        this.getConfirmation = this.getConfirmation.bind(this);
     }
 
-    handleNextButton(val) {
+    handleNextButton(e, val) {
+        // do I need a prevent default?
         this.setState({
             count: val
         })
     }
 
-    handleSubmitButton() {
+    handleInputChange(e) {
+        let { name, value } = e.target;
         this.setState({
-            count: 4
+            [name]: value
         })
+    }
+    
+    handleSubmitButton(e) {
+        e.preventDefault()
+        axios
+        .post('/api', this.state)
+        .then(() => this.setState({
+            count: 4
+        }, () => this.getConfirmation()))
+        // .then()
+        .catch(err => console.log('error submitting', err))
     }
 
-    handleInputChange(e) {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
+    getConfirmation() {
+        axios
+        .get('/api')
+        .then((data) => {
+            let submitted = data.data[data.data.length - 1];
+            let result = Object.entries(submitted);
+            this.setState({ result })
+            })
+        .catch((err) => console.error(err))
     }
+
 
     render() {
         return (
@@ -50,7 +72,7 @@ class App extends React.Component {
                     <br />
                     {
                     this.state.count === 0 && 
-                    <button onClick={() => this.handleNextButton(1)}>Checkout</button>
+                    <button onClick={(e) => this.handleNextButton(e, 1)}>Checkout</button>
                     }
                 </div>
 
@@ -61,15 +83,15 @@ class App extends React.Component {
                         <form id="formOne">
                             <fieldset>
                             <label>Name:<br />
-                                <input name="name" type="text" onChange={() => handleInputChange(e)} />
+                                <input name="name" type="text" onChange={(e) => this.handleInputChange(e)} />
                             </label><br /><br />
                             <label>Email:<br />
-                                <input name="email" type="email" onChange={() => handleInputChange(e)} />
+                                <input name="email" type="email" onChange={(e) => this.handleInputChange(e)} />
                             </label><br /><br />
                             <label>Password:<br />
-                                <input name="password" type="password" onChange={() => handleInputChange(e)} />
+                                <input name="password" type="password" onChange={(e) => this.handleInputChange(e)} />
                             </label><br /><br />
-                                <button onClick={() => this.handleNextButton(2)}>next</button>
+                                <button onClick={(e) => this.handleNextButton(e, 2)}>next</button>
                             </fieldset>
                         </form>
                    </div>
@@ -83,22 +105,22 @@ class App extends React.Component {
                         <form id="formTwo">
                             <fieldset>
                             <label>Address:<br />
-                                <input name="address1" type="text" onChange={() => handleInputChange(e)} /><br />
-                                <input name="address2" type="text" onChange={() => handleInputChange(e)} />
+                                <input name="address1" type="text" onChange={(e) => this.handleInputChange(e)} /><br />
+                                <input name="address2" type="text" onChange={(e) => this.handleInputChange(e)} />
                             </label><br /><br />
                             <label>City:<br />
-                                <input name="address_city" type="text" onChange={() => handleInputChange(e)} />
+                                <input name="address_city" type="text" onChange={(e) => this.handleInputChange(e)} />
                             </label><br /><br />
                             <label> State:<br />
-                                <input name="address_state" type="text" maxlength="2" onChange={() => handleInputChange(e)} />
+                                <input name="address_state" type="text" maxLength="2" onChange={(e) => this.handleInputChange(e)} />
                             </label><br /><br />
                             <label> Zip:<br />
-                                <input name="address_zip" type="number" maxlength="5" onChange={() => handleInputChange(e)} />
+                                <input name="address_zip" type="number" maxLength="5" onChange={(e) => this.handleInputChange(e)} />
                             </label><br /><br />
                             <label>Phone Number:<br />
-                                <input name="phone" type="number" maxlength="11" onChange={() => handleInputChange(e)} />
+                                <input name="phone" type="number" maxLength="11" onChange={(e) => this.handleInputChange(e)} />
                             </label><br /><br />
-                                <button onClick={() => this.handleNextButton(3)}>next</button>
+                                <button onClick={(e) => this.handleNextButton(e, 3)}>next</button>
                             </fieldset>
                         </form>
                     </div>
@@ -112,18 +134,18 @@ class App extends React.Component {
                         <form id="formThree">
                             <fieldset>
                                 <label>Card Number<br />
-                                <input name="cc_num" type="number" onChange={() => handleInputChange(e)} />
+                                <input name="cc_num" type="number" onChange={(e) => this.handleInputChange(e)} />
                                 </label><br /><br />
                                 <label>Exp (MM/YYYY):<br />
-                                <input name="cc_expmonth" type="number" maxlength="2" onChange={() => handleInputChange(e)} />
+                                <input name="cc_expmonth" type="number" maxLength="2" onChange={(e) => this.handleInputChange(e)} />
                                  / 
-                                <input name="cc_expyear" type="number" maxlength="4" onChange={() => handleInputChange(e)} />
+                                <input name="cc_expyear" type="number" maxLength="4" onChange={(e) => this.handleInputChange(e)} />
                                 </label><br /><br />
                                 <label>CCV:<br />
-                                <input name="cc_ccv" type="number" onChange={() => handleInputChange(e)} />
+                                <input name="cc_ccv" type="number" onChange={(e) => this.handleInputChange(e)} />
                                 </label><br /><br />
                                 <label>Billing Zip Code:<br />
-                                <input name="cc_zip" type="number" maxlength="5" onChange={() => handleInputChange(e)} />
+                                <input name="cc_zip" type="number" maxLength="5" onChange={(e) => this.handleInputChange(e)} />
                                 </label><br /><br />
                             </fieldset>
                             <button onClick={this.handleSubmitButton}>submit</button>
@@ -135,7 +157,15 @@ class App extends React.Component {
                 <div>
                     {this.state.count === 4 &&
                     <div>
-                        Hello I am confirmation page
+                        Hello I am confirmation page!
+                        {
+                            this.state.result.map(entryTuple => (
+                                <div>
+                                    {entryTuple[0]}: {entryTuple[1]}
+                                    <br />
+                                </div>
+                            ))
+                        }
                     </div>
                     }
                 </div>
