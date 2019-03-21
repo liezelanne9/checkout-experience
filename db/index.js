@@ -1,18 +1,12 @@
-// create database in MySQL
-// import Sequelize
-// instantiate connection from sequelize to database
-// authenticate connection
-// export connection
-
-import Sequelize from 'sequelize';
+const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize('checkout_experience', 'root', 'hackreactor', {
-    host: localhost,
-    dialect: mysql
+    host: 'localhost',
+    dialect: 'mysql'
 })
 
 sequelize.authenticate()
     .then(() => console.log('---- database connected! ----'))
-    .catch((err) => console.error(err))
+    .catch((err) => console.error('Unable to connect to database', err))
 
 module.exports = sequelize;
