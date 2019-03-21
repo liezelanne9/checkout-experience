@@ -5,7 +5,9 @@ const postUserHelper = () =>
     Users.create({})
 
 // update
-
+const formOneHelper = (name, email, password) => {
+    Users.update()
+}
 
 
 // get
